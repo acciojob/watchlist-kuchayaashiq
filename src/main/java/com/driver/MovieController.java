@@ -11,7 +11,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("movies")
-class MovieController {
+public class MovieController {
     private int id;
     private int dId;
 
