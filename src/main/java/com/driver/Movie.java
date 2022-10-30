@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Movie {
-    private int id;
+
     private  String name;
     private int durationInMinutes;
     private double imdbRating;
@@ -16,14 +16,6 @@ public class Movie {
         this.name = name;
         this.durationInMinutes = durationInMinutes;
         this.imdbRating = imdbRating;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {

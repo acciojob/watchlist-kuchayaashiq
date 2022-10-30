@@ -11,20 +11,16 @@ import java.util.Map;
 @Component
 public class MovieRepository {
 
-    HashMap<Integer,Movie> movies = new HashMap<>();
+   List<Movie> movies = new ArrayList<>();
 
     void addMovie(Movie movie){
-        movies.put(movie.getId(), movie);
+        movies.add(movie);
     }
     List<Movie> getAllMovies(){
-        List<Movie> movieList = new ArrayList<>();
-        for (Movie movie:movies.values()) {
-             movieList.add(movie);
-        }
-        return  movieList;
+        return  movies;
     }
     Movie getMovieByName(String name){
-        for(Movie movie: movies.values()){
+        for(Movie movie: movies){
             if(movie.getName() == name){
                 return movie;
             }
@@ -32,9 +28,9 @@ public class MovieRepository {
         return null;
     }
     void deleteMovie(String name){
-        for(Movie movie: movies.values()){
+        for(Movie movie: movies){
             if(movie.getName() == name){
-                movies.remove(movie.getId());
+                movies.remove(movie);
             }
         }
     }
