@@ -80,6 +80,7 @@ public class MovieController {
     @DeleteMapping("/delete-movie-by-name/{name}")
     public ResponseEntity deleteMovieByName(@PathVariable("name") String name){
         movieService.deleteMovie(name);
+
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
     
