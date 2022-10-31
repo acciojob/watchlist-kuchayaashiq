@@ -95,17 +95,23 @@ public class MovieController {
                 for (Movie movie: listMovies){
                     movieService.deleteMovie(movie.getName());
                 }
-
+                pair.remove(entry.getKey());
             }
-            pair.remove(entry);
+
         }
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
     @DeleteMapping("/delete-all-directors")
     public ResponseEntity deleteAllDirectors(){
         movieService.deleteAllDirectors();
-        pair = new HashMap<>();
-        return new ResponseEntity("success", HttpStatus.OK);
+        List<Movie> listMovies = new ArrayList<>();
+        for(Map.Entry<String , List<Movie>> entry: pair.entrySet()){
+            listMovies = entry.getValue();
+            for (Movie movie: listMovies){
+                movieService.deleteMovie(movie.getName());
+            }
+        }
+        return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
 }
