@@ -3,14 +3,21 @@ package com.driver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class MovieService {
     @Autowired
+
     MovieRepository movieRepository;
-    List<Movie> findAllMovie(){
-        return movieRepository.findAllMovies();
+    List<String> findAllMovie(){
+        List<String> moviesName = new ArrayList<>();
+        List<Movie>  movieList = movieRepository.findAllMovies();
+        for (Movie movie : movieList){
+            moviesName.add(movie.getName());
+        }
+        return moviesName;
     }
 
     void addMovies(Movie movie){
