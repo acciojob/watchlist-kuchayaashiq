@@ -14,8 +14,8 @@ import java.util.*;
 public class MovieController {
 
 
-    List<Director> directors =new ArrayList<>();
-    HashMap<String, String> pair =  new HashMap<>();
+
+    HashMap<String, List<Movie>> pair =  new HashMap<>();
     @Autowired
     MovieService movieService;
 
@@ -27,9 +27,9 @@ public class MovieController {
 
     //GET /movies/get-movie-by-name/{name}
     @GetMapping("/get-movie-by-name/{name}")
-    public ResponseEntity getMOvieByName(@PathVariable("name") String name) {
-
-        return new ResponseEntity<>(movieService.getMovieByName(name), HttpStatus.OK);
+    public ResponseEntity getMovieByName(@PathVariable("name") String name) {
+        Movie movie = movieService.getMovieByName(name);
+        return new ResponseEntity<>( movie, HttpStatus.OK);
     }
 
     @GetMapping("/get-all-movies")
@@ -44,56 +44,57 @@ public class MovieController {
     
     @PostMapping("/add-director")
     public ResponseEntity addDirector(@RequestBody Director director){
-        directors.add(director);
+        movieService.addDirector(director);
+        pair.put(director.getName(),new ArrayList<>());
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
     @GetMapping("/get-director-by-name/{name}")
-    public ResponseEntity getdirectorByName(@PathVariable("name") String name) {
-        for(Director director: directors){
-            if(director.getName().equals(name)){
-                return new ResponseEntity(director, HttpStatus.OK);
-            }
-        }
-        return new ResponseEntity("No director found",HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Director> getDirectorByName(@PathVariable("name") String name) {
+        return new ResponseEntity(movieService.getDirectorByName(name), HttpStatus.OK);
     }
     @PutMapping("/add-movie-director-pair")
     public ResponseEntity addMovieDirectorPair(@RequestParam String mName, String dName){
-        pair.put(mName, dName);
+        Movie movie = movieService.getMovieByName(mName);
+        for(Map.Entry<String, List<Movie>> entry:pair.entrySet()){
+            if(entry.getKey().equals(dName)){
+                pair.get(dName).add(movie);
+            }
+        }
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
     @GetMapping("/get-movies-by-director-name/{director}")
     public  ResponseEntity<List<Movie>> getMoviesByDirectorName(@PathVariable("director") String director){
         List<Movie> listMovies = new ArrayList<>();
-        for(Map.Entry<String, String> e : pair.entrySet()){
-            if(e.getValue() == director){
-                listMovies.add(movieService.getMovieByName(e.getKey()));
+        for(Map.Entry<String , List<Movie>> entry: pair.entrySet()){
+            if(entry.getKey().equals(director)){
+                listMovies = entry.getValue();
+
             }
         }
 
         return new ResponseEntity<>(listMovies, HttpStatus.OK);
+
     }
     @DeleteMapping("/delete-director-by-name")
     public ResponseEntity deleteDirectorByName(@RequestParam String name ){
-        Iterator<Map.Entry<String, String> >iterator = pair.entrySet().iterator();
-        while(iterator.hasNext()){
-            Map.Entry<String, String> e =  iterator.next();
-            if(name == e.getValue()){
-                movieService.deleteMovie(name);
+        List<Movie> listMovies = new ArrayList<>();
+        for(Map.Entry<String , List<Movie>> entry: pair.entrySet()){
+            if(entry.getKey().equals(name)){
+                movieService.deleteDirector(name);
+                listMovies = entry.getValue();
+                for (Movie movie: listMovies){
+                    movieService.deleteMovie(movie.getName());
+                }
 
             }
-            pair.remove(e.getKey());
+            pair.remove(entry);
         }
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
     @DeleteMapping("/delete-all-directors")
     public ResponseEntity deleteAllDirectors(){
-        directors = new ArrayList<>();
-        Iterator<Map.Entry<String, String> >iterator = pair.entrySet().iterator();
-        while(iterator.hasNext()){
-            Map.Entry<String, String> e =  iterator.next();
-            movieService.deleteMovie(e.getKey());
-            pair.remove(e.getKey());
-        }
+        movieService.deleteAllDirectors();
+        pair = new HashMap<>();
         return new ResponseEntity("success", HttpStatus.OK);
     }
 

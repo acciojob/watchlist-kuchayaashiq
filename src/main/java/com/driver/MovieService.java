@@ -22,4 +22,17 @@ public class MovieService {
     void deleteMovie(String name){
         movieRepository.deleteMovie(name);
     }
+    void addDirector(Director director){
+        movieRepository.addDirector(director);
+    }
+
+    Director getDirectorByName(String name){
+        return movieRepository.getDirectorByName(name);
+    }
+    void deleteDirector(String name){
+        movieRepository.deleteDirector(name);
+    }
+    void deleteAllDirectors(){
+        movieRepository.deleteAllDirectors();
+    }
 }
