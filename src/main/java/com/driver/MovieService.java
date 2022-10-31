@@ -9,8 +9,8 @@ import java.util.List;
 public class MovieService {
     @Autowired
     MovieRepository movieRepository;
-    List<Movie> getAllMovie(){
-        return movieRepository.getAllMovies();
+    List<Movie> findAllMovie(){
+        return movieRepository.findAllMovies();
     }
 
     void addMovies(Movie movie){

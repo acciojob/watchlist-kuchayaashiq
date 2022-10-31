@@ -18,7 +18,7 @@ public class MovieRepository {
     void addMovie(Movie movie){
         movies.add(movie);
     }
-    List<Movie> getAllMovies(){
+    List<Movie> findAllMovies(){
         return  movies;
     }
     Movie getMovieByName(String name){
