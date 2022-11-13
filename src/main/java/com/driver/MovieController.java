@@ -6,33 +6,35 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.*;
 
 @RestController
 @RequestMapping("movies")
+@EnableSwagger2
+@EnableWebMvc
 public class MovieController {
-
-
 
     HashMap<String, List<Movie>> pair =  new HashMap<>();
     @Autowired
     MovieService movieService;
 
     @PostMapping("/add-movie")
-    public ResponseEntity addMovie(@RequestBody Movie movie) {
+    public ResponseEntity addMovie(@RequestBody() Movie movie) {
         movieService.addMovies(movie);
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
     @PostMapping("/add-director")
-    public ResponseEntity addDirector(@RequestBody Director director){
+    public ResponseEntity addDirector(@RequestBody() Director director){
         movieService.addDirector(director);
         pair.put(director.getName(),new ArrayList<>());
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
     @PutMapping("/add-movie-director-pair")
-    public ResponseEntity addMovieDirectorPair(@RequestParam String mName, String dName){
+    public ResponseEntity addMovieDirectorPair(@RequestParam(value="mName") String mName,@RequestParam(value="dName") String dName){
         Movie movie = movieService.getMovieByName(mName);
         for(Map.Entry<String, List<Movie>> entry:pair.entrySet()){
             if(entry.getKey().equals(dName)){
