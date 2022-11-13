@@ -79,8 +79,8 @@ public class MovieController {
         List<String> movieList = movieService.findAllMovie();
         return new ResponseEntity<>(movieList, HttpStatus.OK);
     }
-    @DeleteMapping("/delete-movie-by-name/{name}")
-    public ResponseEntity deleteMovieByName(@PathVariable("name") String name){
+    @DeleteMapping("/delete-movie-by-name")
+    public ResponseEntity deleteMovieByName(@RequestParam(value ="name") String name){
         movieService.deleteMovie(name);
 
         return new ResponseEntity<>("success", HttpStatus.OK);
@@ -88,7 +88,7 @@ public class MovieController {
     
 
     @DeleteMapping("/delete-director-by-name")
-    public ResponseEntity deleteDirectorByName(@RequestParam String name ){
+    public ResponseEntity deleteDirectorByName(@RequestParam("name") String name ){
         List<Movie> listMovies = new ArrayList<>();
         for(Map.Entry<String , List<Movie>> entry: pair.entrySet()){
             if(entry.getKey().equals(name)){
