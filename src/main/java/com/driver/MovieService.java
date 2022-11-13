@@ -8,38 +8,43 @@ import java.util.List;
 
 @Service
 public class MovieService {
+
     @Autowired
-
     MovieRepository movieRepository;
-    List<String> findAllMovie(){
-        List<String> moviesName = new ArrayList<>();
-        List<Movie>  movieList = movieRepository.findAllMovies();
-        for (Movie movie : movieList){
-            moviesName.add(movie.getName());
-        }
-        return moviesName;
+
+    public void addMovie(Movie movie){
+        movieRepository.saveMovie(movie);
     }
 
-    void addMovies(Movie movie){
-        movieRepository.addMovie(movie);
-    }
-    Movie getMovieByName(String name){
-        return movieRepository.getMovieByName(name);
-    }
-    void deleteMovie(String name){
-        movieRepository.deleteMovie(name);
-    }
-    void addDirector(Director director){
-        movieRepository.addDirector(director);
+    public void addDirector(Director director){
+        movieRepository.saveDirector(director);
     }
 
-    Director getDirectorByName(String name){
-        return movieRepository.getDirectorByName(name);
+    public void createMovieDirectorPair(String movie, String director){
+        movieRepository.saveMovieDirectorPair(movie, director);
     }
-    void deleteDirector(String name){
-        movieRepository.deleteDirector(name);
+
+    public Movie findMovie(String movieName){
+        return movieRepository.findMovie(movieName);
     }
-    void deleteAllDirectors(){
-        movieRepository.deleteAllDirectors();
+
+    public Director findDirector(String directorName){
+        return movieRepository.findDirector(directorName);
+    }
+
+    public List<String> findMoviesFromDirector(String director){
+        return movieRepository.findMoviesFromDirector(director);
+    }
+
+    public List<String> findAllMovies(){
+        return movieRepository.findAllMovies();
+    }
+
+    public void deleteDirector(String director){
+        movieRepository.deleteDirector(director);
+    }
+
+    public void deleteAllDirectors(){
+        movieRepository.deleteAllDirector();
     }
 }
